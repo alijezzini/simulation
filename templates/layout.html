@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title> SMS Simulation</title>
+</head>
+<body>
+
+<!-- Image and text -->
+<nav class="navbar navbar-light " style="background-color: #e04e5c;">
+    <a class="navbar-brand" href="https://montymobile.com/">
+        <img src="{{url_for('static', filename='logoedited.png')}}" width="100" height="35" class="d-inline-block align-top" alt="" loading="lazy">
+
+        Welcome to MontyMobile Simulation Section
+    </a>
+</nav>
+
+
+<!-- big conatiner (2 col) -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} text-center alert-dismissible fade show " role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+        <!-- big col (left) -->
+        <div class="col-6 shadow ml-3 mr-3 ">
+
+
+            <form action="/simulation" method="POST">
+                {{ form.csrf_token }}
+
+                <div class="container my-2">
+                    <div class="border border-danger p-3">
+
+                        <div class="form-group w-50">
+
+                            {{ form.username.label(class="form-control-label") }}
+
+                            {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.username(class="form-control form-control" , placeholder="enter your username") }}
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group w-50">
+                            {{ form.password.label(class="form-control-label") }}
+                            {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.password(class="form-control form-control" , placeholder="enter your password") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group w-50">
+                            {{ form.source.label(class="form-control-label") }}
+
+                            {% if form.source.errors %}
+                            {{ form.source(class="form-control form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.source.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.source(class="form-control form-control" , placeholder="enter the source id") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group w-50">
+                            {{ form.destination.label(class="form-control-label") }}
+
+                            {% if form.destination.errors %}
+                            {{ form.destination(class="form-control form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.destination.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.destination(class="form-control form-control" , placeholder="mobile number where the SMS is to be sent") }}
+                            {% endif %}
+
+                        </div>
+                        <div class="form-group w-75">
+                            {{ form.msg.label(class="form-control-label") }}
+
+                            {% if form.msg.errors %}
+                            {{ form.msg(class="form-control form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.msg.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.msg(class="form-control form-control" , rows="4") }}
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group w-25">
+                            {{ form.getpost.label(class="form-control-label") }}
+
+                            {% if form.getpost.errors %}
+                            {{ form.getpost(class="form-control form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.getpost.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.getpost(class="form-control form-control" , rows="3") }}
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                    <br>
+                    {{ form.submit(class="btn btn-outline-danger") }}
+
+                    <a href="/simulation" class="">Clear All</a>
+
+                </div>
+            </form>
+
+
+        </div>
+        <!-- right col () -->
+        <div class="col shadow ml-3 mr-3 ">
+
+
+            <div class="container my-2">
+                <div class="border border-danger p-3">
+
+
+                    <div class="form-group w-75">
+                        <label for="response">Response in json format</label>
+                        <textarea class="form-control" id="response" rows="12" placeholder="Response"
+                                  readonly>{{getpost}} {{response}}</textarea>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="container my-2">
+                <div class="border border-danger p-3">
+
+
+                    <div class="form-group w-75">
+                        <label for="response">DLR Response </label>
+                        <textarea class="form-control" id="response" rows="6" placeholder="DLR Response"
+                                  readonly>{{getpost}} {{DLR}} </textarea>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+</html>
